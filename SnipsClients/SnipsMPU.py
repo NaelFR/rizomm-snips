@@ -90,7 +90,7 @@ class SnipsMPU(object):
     def start_block(self):
         with Hermes(self.__mqtt_addr) as h:
             h.subscribe_intent(
-                'lightManagement',
+                'lightManagemente',
                 self.handler_relay_turn_on
             ) \
              .start()
