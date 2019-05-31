@@ -1,0 +1,8 @@
+*.pyc
+config.ini
+.ftpconfig
+.ftpignore
+venv/
+__pycache__/
+
+\.idea
