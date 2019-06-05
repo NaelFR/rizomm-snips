@@ -54,7 +54,7 @@ class SnipsMPU(object):
         self.__relay.turn_on()
         hermes.publish_end_session(
             intent_message.session_id,
-            self.__i18n.get('relayTurnOn', {"salle": "la salle 408"})
+            self.__i18n.get('relayTurnOn')
         )
 
     @check_confidence_score
