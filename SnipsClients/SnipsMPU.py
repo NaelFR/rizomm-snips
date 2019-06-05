@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import functools
+import json
 
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
@@ -17,11 +18,6 @@ class SnipsMPU(object):
         self.__sht31 = sht31
 
         self.__mqtt_addr = mqtt_addr
-
-    def dump(obj):
-        for attr in dir(obj):
-            if hasattr(obj, attr):
-                print("obj.%s = %s" % (attr, getattr(obj, attr)))
 
     def check_site_id(handler):
         @functools.wraps(handler)
@@ -56,7 +52,9 @@ class SnipsMPU(object):
     @check_site_id
     def handler_relay_turn_on(self, hermes, intent_message):
         print("Relay Turn On")
-        self.dump(intent_message)
+        parsed = json.load(intent_message)
+        print(json.dumps(parsed, indent=4, sort_keys=False))
+        print(intent_message)
         self.__relay.turn_on()
         hermes.publish_end_session(
             intent_message.session_id,
