@@ -5,7 +5,6 @@ import functools
 
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
-from pprint import pprint
 
 class SnipsMPU(object):
     def __init__(self, i18n, mqtt_addr, site_id, relay, sht31):
@@ -52,7 +51,6 @@ class SnipsMPU(object):
     @check_site_id
     def handler_relay_turn_on(self, hermes, intent_message):
         print("Relay Turn On")
-        pprint(vars(intent_message))
         self.__relay.turn_on()
         hermes.publish_end_session(
             intent_message.session_id,
