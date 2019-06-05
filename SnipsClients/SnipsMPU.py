@@ -71,26 +71,38 @@ class SnipsMPU(object):
     @check_site_id
     def handler_check_humidity(self, hermes, intent_message):
         print("Humidity Check")
-        humidity = self.__sht31.get_humidity_string()
+        # humidity = self.__sht31.get_humidity_string()
         hermes.publish_end_session(
             intent_message.session_id,
-            self.__i18n.get('checkHumidity', {"humidity": humidity})
+            self.__i18n.get('checkHumidity')
         )
 
     @check_confidence_score
     @check_site_id
     def handler_check_temperature(self, hermes, intent_message):
         print("Temperature Check")
-        temperature = self.__sht31.get_temperature_string()
+        # temperature = self.__sht31.get_temperature_string()
         hermes.publish_end_session(
             intent_message.session_id,
-            self.__i18n.get('checkTemperature', {"temperature": temperature})
+            self.__i18n.get('checkTemperature')
         )
 
     def start_block(self):
         with Hermes(self.__mqtt_addr) as h:
             h.subscribe_intent(
-                'lightManagemente',
+                'relayTurnOn',
                 self.handler_relay_turn_on
+            ) \
+             .subscribe_intent(
+                'relayTurnOff',
+                self.handler_relay_turn_off
+            ) \
+             .subscribe_intent(
+                'checkHumidity',
+                self.handler_check_humidity
+            ) \
+             .subscribe_intent(
+                'checkTemperature',
+                self.handler_check_temperature
             ) \
              .start()

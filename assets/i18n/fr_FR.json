@@ -4,6 +4,6 @@
     },
     "relayTurnOn": "Le relais a été activé.",
     "relayTurnOff": "Le relais a été désactivé.",
-    "checkHumidity": "L'humidité actuelle est {{ humidity }}%",
-    "checkTemperature": "La température actuelle est de {{ temperature }} degrés."
+    "checkHumidity": "L'humidité actuelle est 30%",
+    "checkTemperature": "La température actuelle est de 17 degrés."
 }
