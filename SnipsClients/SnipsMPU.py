@@ -18,6 +18,11 @@ class SnipsMPU(object):
 
         self.__mqtt_addr = mqtt_addr
 
+    def dump(obj):
+        for attr in dir(obj):
+            if hasattr(obj, attr):
+                print("obj.%s = %s" % (attr, getattr(obj, attr)))
+
     def check_site_id(handler):
         @functools.wraps(handler)
         def wrapper(self, hermes, intent_message):
@@ -51,7 +56,7 @@ class SnipsMPU(object):
     @check_site_id
     def handler_relay_turn_on(self, hermes, intent_message):
         print("Relay Turn On")
-        print(intent_message)
+        self.dump(intent_message)
         self.__relay.turn_on()
         hermes.publish_end_session(
             intent_message.session_id,
