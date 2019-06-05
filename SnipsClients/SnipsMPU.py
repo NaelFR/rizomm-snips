@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import functools
-import json
 
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
+from pprint import pprint
 
 class SnipsMPU(object):
     def __init__(self, i18n, mqtt_addr, site_id, relay, sht31):
@@ -52,13 +52,11 @@ class SnipsMPU(object):
     @check_site_id
     def handler_relay_turn_on(self, hermes, intent_message):
         print("Relay Turn On")
-        parsed = json.load(intent_message)
-        print(json.dumps(parsed, indent=4, sort_keys=False))
-        print(intent_message)
+        pprint(vars(intent_message))
         self.__relay.turn_on()
         hermes.publish_end_session(
             intent_message.session_id,
-            self.__i18n.get('relayTurnOn')
+            self.__i18n.get('relayTurnOn', {"salle": "la salle 408"})
         )
 
     @check_confidence_score
