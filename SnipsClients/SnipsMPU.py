@@ -51,6 +51,7 @@ class SnipsMPU(object):
     @check_site_id
     def handler_relay_turn_on(self, hermes, intent_message):
         print("Relay Turn On")
+        print(intent_message)
         self.__relay.turn_on()
         hermes.publish_end_session(
             intent_message.session_id,
