@@ -71,20 +71,20 @@ class SnipsMPU(object):
     @check_site_id
     def handler_check_humidity(self, hermes, intent_message):
         print("Humidity Check")
-        # humidity = self.__sht31.get_humidity_string()
+        humidity = self.__sht31.get_humidity_string()
         hermes.publish_end_session(
             intent_message.session_id,
-            self.__i18n.get('checkHumidity')
+            self.__i18n.get('checkHumidity', {"humidity": humidity})
         )
 
     @check_confidence_score
     @check_site_id
     def handler_check_temperature(self, hermes, intent_message):
         print("Temperature Check")
-        # temperature = self.__sht31.get_temperature_string()
+        temperature = self.__sht31.get_temperature_string()
         hermes.publish_end_session(
             intent_message.session_id,
-            self.__i18n.get('checkTemperature')
+            self.__i18n.get('checkTemperature', {"temperature": temperature})
         )
 
     def start_block(self):
