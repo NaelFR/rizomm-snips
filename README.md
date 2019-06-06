@@ -1,151 +1,76 @@
-<img align="right" src="docs/devKit.png" width="150">
+# Snips pour Rizomm
 
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/snipsco/snips-demo-dev-kit/blob/master/LICENSE)
-[![Version](https://img.shields.io/badge/version-0.3.0-green.svg)](https://github.com/snipsco/snips-demo-dev-kit/blob/master/)
+Snips nous permet de créer un assistant vocal privé.
+## Pré-requis
+* Maker kit Snips
+* Node ( >= 7.5.0)
+* Git
 
-# snips-demo-dev-kit
+## Installation du maker kit
+### 1. Installation raspbian sur la carte SD
 
-Official action code for [Snips Voice Interaction Development Kit](https://www.seeedstudio.com/snips.html).
+Procurez-vous une image Raspbian stretch Lite sur le [site officiel](https://www.raspberrypi.org/downloads/raspbian/) et flashez la sur la carte SD qui va servir de disque dur au raspberry. (utiliser BalenaEtcher, par exemple)
 
-It's composed of [snips-app-relay-switch](https://github.com/snipsco/snips-app-relay-switch/) and [snips-app-sht31](https://github.com/snipsco/snips-app-sht31/), enables you to control the connected relay module and fetch the indoor environment informations.
+### 2. Configurer la connexion internet du raspberry
+1. Connexion wifi
+> Si votre raspberry est connecté en ethernet, vous pouvez passer cet étape
 
-## Usage
-
-#### :bulb: Controlling a connected device
-
-***```"Hey snips, please turn on my light"```***
-
-***```"Hey snips, please turn off my light"```***
-
-#### :snowman: Asking for temperature
-
-***```"Hey snips, please tell me the current temperature?"```***
-
-#### :bamboo: Asking for humidity
-
-***```"Hey snips, what's the humidity in the room?"```***
-
-## Installation
-
-### Pre-required
-
-Please make sure that `_snips-skills` user has permission to access `gpio` and `i2c`.
-
-To grant this permission, run the following command **on Raspberry Pi**:
-
-```bash
-sudo usermod -a -G i2c,spi,gpio,audio _snips-skills
+Avant de mettre la carte SD dans votre appareil, mettez dedans un fichier nommé ```wpa_supplicant.conf```  contenant ce snippet de code :
 ```
-
-If install to a satellite device, please make sure it has `snips-skill-server` installed first.
-
-To install `snips-skill-server`:
-
-```bash
-sudo apt-get install snips-skill-server
+country=<COUNTRY_CODE>
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+network={
+	ssid="Your Wi-Fi network name"
+	psk="Your Wi-Fi network password"
+}
 ```
+Assurez-vous de remplacer les valeurs de **country** (FR pour la France), **ssid** et **psk**.
 
-### With Assistant (Recommend)
+2. Accès SSH
 
-1. Create a Snips account **[here](https://console.snips.ai/signup)**
+Afin d'activer l'accès ssh au raspberry, veuillez créer un fichier nommé ```ssh``` et mettez le dans la carte SD.
 
-<p align="center">
-    <img src="docs/register.png" height="350">
-</p>
+## Installation de la plateforme Snips
 
-2. Create an assistant in **[Snips Console](https://console.snips.ai/)**
+Afin de pouvoir communiquer facilement avec votre raspberry et pouvoir y installer la plateforme Snips il vous faut installer la [CLI Sam](https://docs.snips.ai/reference/sam)
 
-<p align="center">
-    <img src="docs/createAssistant.png" height="350">
-</p>
+```sudo  npm  install -g snips-sam```
 
-3. Add **Voice Interaction Dev Kit** App to your assistant
+Une fois installé, vous pouvez retrouver votre raspberry (s'il est bien connecté sur le même réseau que votre ordinateur) en tapant :
 
-- **[English App](https://console.snips.ai/store/en/skill_327kQdNonx85) :us:**
-- **[French App](https://console.snips.ai/store/fr/skill_m6Aoky9NQ5w) :fr:**
-- **[Japanese App](https://console.snips.ai/store/ja/skill_gyP2M63X74o) :jp:**
+```sam devices```
 
-<p align="center">
-    <img src="docs/addApp.png" height="350">
-</p>
-
-4. Deploy assistant by executing the provided command **on your laptop**
-
-<p align="center">
-    <img src="docs/deployAssistant.png" height="350">
-</p>
-
-### Only action code
-
-Using `sam` to fetch the content of this repo **on your laptop**
-
-```bash
-sam install actions -g https://github.com/snipsco/snips-demo-dev-kit.git
-```
-
-### Manually
-
-1. Clone the content of this repo to local:
-
-```bash
-git clone https://github.com/snipsco/snips-demo-dev-kit.git
-```
-
-2. Run `setup.sh` to install:
-
-```bash
-cd snips-demo-dev-kit/
-./setup.sh
-```
-
-3. Activate virtual environment:
-
-```bash
-source venv/bin/activate
-```
-
-4. Run the action code:
+Si tout va bien vous devriez avoir un retour tel que le suivant : 
 
 ```
-./action-demo_dev_kit.py
+Scanning Raspberry Pi devices on the network...
+Found 1 device:
+- raspberrypi (192.168.9.2)
 ```
 
-## Configurations
+Connectez-vous à votre raspberry en tapant :
 
-### Connection
+``` sam connect raspberrypi ```
 
-| Config | Description | Value | Default |
-| --- | --- | --- | --- |
-| `mqtt_host` | MQTT host name | `<ip address>`/`<hostname>` | `localhost` |
-| `mqtt_port` | MQTT port number | `<mqtt port>` | `1883` |
-| `site_id` | Snips device ID | Refering to the actual `snips.toml` | `default` |
+et enfin, initialisez la plateforme :
 
-##### :bangbang: ***If this skill is installed on a satellite device, please change the `site_id` to the one set for satellite, and change `mqtt_host` connecting to master device.***
+```sam init ```
 
-### TTS language
+Après quelques minutes vous serez prêt à configurer la partie audio du raspberry.
 
-| Config | Description | Value | Default |
-| --- | --- | --- | --- |
-| `locale` | The tts language | `en_US`, `fr_FR` | `en_US` |
+## Configuration du matériel audio
 
-> *NOTE: Japanese text-to-speech is not yet supported, which means that adding Japanese translation will block `snips-tts` software*
+**sam** nous offre une solution assez simple de configurer le microphone ainsi que le speaker du maker kit.
 
-### Relay GPIO pin
+Vous n'avez qu'à taper la commande suivante : 
 
-| Config | Description | Value | Default |
-| --- | --- | --- | --- |
-| `relay_gpio_bcm` | The BCM GPIO number | [Available BCM pin number](https://www.raspberrypi.org/documentation/usage/gpio/README.md) | `12` |
+```sam setup audio```
 
-### Temperature Unit
+puis suivez les étapes d'installation de vos périphériques.
 
-| Config | Description | Value | Default |
-| --- | --- | --- | --- |
-| `temperature_unit` | The unit applied to temperature | `celsius`, `fahrenheit` | `celsius` |
+Enfin, testez-les avec les commandes suivantes : 
 
-## Contributing
-
-Please see the [Contribution Guidelines](https://github.com/snipsco/snips-demo-dev-kit/blob/master/CONTRIBUTING.md).
-
-## Copyright
-
-This library is provided by [Snips](https://www.snips.ai) as Open Source software. See [LICENSE](https://github.com/snipsco/snips-demo-dev-kit/blob/master/LICENSE) for more information.
+```sam test speaker```
+et
+```sam test microphone```
