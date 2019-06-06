@@ -6,6 +6,7 @@ import functools
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 
+
 class SnipsMPU(object):
     def __init__(self, i18n, mqtt_addr, site_id):
         self.THRESHOLD_INTENT_CONFSCORE_DROP = 0.3
