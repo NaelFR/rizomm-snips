@@ -54,7 +54,7 @@ class SnipsMPU(object):
         print("Relay Turn On")
         hermes.publish_end_session(
             intent_message.session_id,
-            self.__i18n.get('relayTurnOn')
+            self.__i18n.get('relayTurnOn', {"salle": "la salle 408"})
         )
 
     @check_confidence_score
@@ -63,7 +63,7 @@ class SnipsMPU(object):
         print("Relay Turn Off")
         hermes.publish_end_session(
             intent_message.session_id,
-            self.__i18n.get('relayTurnOff')
+            self.__i18n.get('relayTurnOff', {"salle": "la salle 408"})
         )
 
     def start_block(self):

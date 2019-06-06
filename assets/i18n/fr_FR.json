@@ -2,8 +2,6 @@
     "error": {
         "doNotUnderstand": "Désolé, je n'ai pas compris."
     },
-    "relayTurnOn": "Le relais a été activé dans la salle 408.",
-    "relayTurnOff": "Le relais a été désactivé dans la salle 408.",
-    "checkHumidity": "L'humidité actuelle est 30%.",
-    "checkTemperature": "La température actuelle est de 17 degrés."
+    "relayTurnOn": "La lumière de {{salle}} a été allumée.",
+    "relayTurnOff": "La lumière de {{salle}} a été éteinte.",
 }
