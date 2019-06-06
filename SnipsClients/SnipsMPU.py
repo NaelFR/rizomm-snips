@@ -19,6 +19,7 @@ class SnipsMPU(object):
     def check_site_id(handler):
         @functools.wraps(handler)
         def wrapper(self, hermes, intent_message):
+            print('CHECK SITE ID')
             if intent_message.site_id != self.__site_id:
                 return None
             else:
@@ -28,6 +29,7 @@ class SnipsMPU(object):
     def check_confidence_score(handler):
         @functools.wraps(handler)
         def wrapper(self, hermes, intent_message):
+            print('CHECK CONFIDENCE SCORE')
             if handler is None:
                 return None
             if intent_message.intent.confidence_score < self.THRESHOLD_INTENT_CONFSCORE_DROP:
@@ -64,6 +66,7 @@ class SnipsMPU(object):
         )
 
     def start_block(self):
+        print('START BLOCK')
         with Hermes(self.__mqtt_addr) as h:
             h.subscribe_intent(
                 'lightTurnOn',
